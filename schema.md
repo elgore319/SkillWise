@@ -2,7 +2,7 @@ skillwise.db
 
 Table: users
 
-columns: id, firstName, lastName, email, password;
+columns: id, firstName, lastName, email, password, profileCompleted;
 
 JSON format
 
@@ -16,6 +16,8 @@ JSON format
 
    email: string,
 
-   password: string,
+   password: string, 
+
+   profileCompleted: boolean, 
 
 }
