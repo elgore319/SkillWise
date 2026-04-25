@@ -582,7 +582,6 @@ function App() {
           <p className="eyebrow">SkillWise</p>
           <h1>Welcome Back</h1>
           <p className="hero-copy">Login first, then continue to your dashboard.</p>
-          <p className="status-pill" role="status">{apiStatus}</p>
         </header>
 
         <section className="panel auth-panel">
@@ -657,6 +656,7 @@ function App() {
           {message ? <p className="feedback ok">{message}</p> : null}
           {error ? <p className="feedback bad">{error}</p> : null}
         </section>
+        <p className="status-pill api-status-fixed" role="status">{apiStatus}</p>
       </main>
     )
   }
@@ -668,7 +668,6 @@ function App() {
           <p className="eyebrow">SkillWise</p>
           <h1>Set Up Your Account</h1>
           <p className="hero-copy">This is a one-time step. Add your name to finish onboarding.</p>
-          <p className="status-pill" role="status">{apiStatus}</p>
         </header>
 
         <section className="panel auth-panel">
@@ -689,6 +688,7 @@ function App() {
           {message ? <p className="feedback ok">{message}</p> : null}
           {error ? <p className="feedback bad">{error}</p> : null}
         </section>
+        <p className="status-pill api-status-fixed" role="status">{apiStatus}</p>
       </main>
     )
   }
@@ -700,7 +700,6 @@ function App() {
         <h1>Find Your Mentor</h1>
         <p className="hero-copy">Signed in as {authUser.firstName} {authUser.lastName}.</p>
         <button type="button" className="logout-btn" onClick={logout}>Logout</button>
-        <p className="status-pill" role="status">{apiStatus}</p>
       </header>
 
       <nav className="dash-nav">
@@ -910,6 +909,7 @@ function App() {
           {error ? <p className="feedback bad">{error}</p> : null}
         </section>
       )}
+      <p className="status-pill api-status-fixed" role="status">{apiStatus}</p>
     </main>
   )
 }
