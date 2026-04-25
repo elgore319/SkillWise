@@ -1,0 +1,9 @@
+{
+  "name": "skillwise-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix ../.. run server:dev",
+    "start": "npm --prefix ../.. run server"
+  }
+}
