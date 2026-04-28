@@ -1,5 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+﻿import { useEffect, useMemo, useState } from 'react'
 import './App.css'
+import AuthPage from './components/AuthPage.jsx'
+import SetupPage from './components/SetupPage.jsx'
+import BrowseMentors from './components/BrowseMentors.jsx'
+import MentorDetail from './components/MentorDetail.jsx'
+import Messages from './components/Messages.jsx'
+import MyMentorProfile from './components/MyMentorProfile.jsx'
+import Payments from './components/Payments.jsx'
+import logo from '../assets/title.png'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000'
 
@@ -220,6 +228,17 @@ function App() {
     setFormSubmitting(true)
     setError('')
     setMessage('')
+    if (!mentorForm.skills.trim()) {
+      setError('Skills are required.')
+      setFormSubmitting(false)
+      return
+    }
+    const rate = Number(mentorForm.hourlyRate)
+    if (!mentorForm.hourlyRate || isNaN(rate) || rate <= 0) {
+      setError('Hourly rate must be a number greater than 0.')
+      setFormSubmitting(false)
+      return
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/api/mentors`, {
         method: 'POST',
@@ -244,6 +263,17 @@ function App() {
     setFormSubmitting(true)
     setError('')
     setMessage('')
+    if (!mentorForm.skills.trim()) {
+      setError('Skills are required.')
+      setFormSubmitting(false)
+      return
+    }
+    const rate = Number(mentorForm.hourlyRate)
+    if (!mentorForm.hourlyRate || isNaN(rate) || rate <= 0) {
+      setError('Hourly rate must be a number greater than 0.')
+      setFormSubmitting(false)
+      return
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/api/mentors/${myMentorProfile.id}`, {
         method: 'PUT',
@@ -288,6 +318,16 @@ function App() {
     setFormSubmitting(true)
     setError('')
     setMessage('')
+    if (!messageForm.receiverId) {
+      setError('Please select a recipient.')
+      setFormSubmitting(false)
+      return
+    }
+    if (!messageForm.content.trim()) {
+      setError('Message cannot be empty.')
+      setFormSubmitting(false)
+      return
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/api/messages`, {
         method: 'POST',
@@ -322,6 +362,11 @@ function App() {
     setFormSubmitting(true)
     setError('')
     setMessage('')
+    if (!reviewForm.comment.trim()) {
+      setError('Please write a comment for your review.')
+      setFormSubmitting(false)
+      return
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/api/reviews`, {
         method: 'POST',
@@ -418,6 +463,18 @@ function App() {
     setError('')
     setMessage('')
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(loginForm.email.trim())) {
+      setError('Please enter a valid email address.')
+      setAuthSubmitting(false)
+      return
+    }
+    if (!loginForm.password) {
+      setError('Password is required.')
+      setAuthSubmitting(false)
+      return
+    }
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
@@ -453,6 +510,17 @@ function App() {
     setError('')
     setMessage('')
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(registerForm.email.trim())) {
+      setError('Please enter a valid email address.')
+      setAuthSubmitting(false)
+      return
+    }
+    if (registerForm.password.length < 8) {
+      setError('Password must be at least 8 characters.')
+      setAuthSubmitting(false)
+      return
+    }
     if (registerForm.password !== registerForm.confirmPassword) {
       setError('Passwords do not match.')
       setAuthSubmitting(false)
@@ -490,6 +558,17 @@ function App() {
     setError('')
     setMessage('')
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(resetPasswordForm.email.trim())) {
+      setError('Please enter a valid email address.')
+      setAuthSubmitting(false)
+      return
+    }
+    if (resetPasswordForm.newPassword.length < 8) {
+      setError('New password must be at least 8 characters.')
+      setAuthSubmitting(false)
+      return
+    }
     if (resetPasswordForm.newPassword !== resetPasswordForm.confirmPassword) {
       setError('Passwords do not match.')
       setAuthSubmitting(false)
@@ -529,6 +608,12 @@ function App() {
 
     if (!setupForm.firstName.trim() || !setupForm.lastName.trim()) {
       setError('First and last name are required.')
+      setAuthSubmitting(false)
+      return
+    }
+    const nameRegex = /^[a-zA-Z\s'\-]+$/
+    if (!nameRegex.test(setupForm.firstName.trim()) || !nameRegex.test(setupForm.lastName.trim())) {
+      setError('Names may only contain letters, spaces, hyphens, and apostrophes.')
       setAuthSubmitting(false)
       return
     }
@@ -577,126 +662,44 @@ function App() {
 
   if (!authUser) {
     return (
-      <main className="app-shell auth-shell">
-        <header className="hero">
-          <p className="eyebrow">SkillWise</p>
-          <h1>Welcome Back</h1>
-          <p className="hero-copy">Login first, then continue to your dashboard.</p>
-        </header>
-
-        <section className="panel auth-panel">
-          <div className="auth-tabs">
-            <button type="button" className={authMode === 'login' ? 'tab active' : 'tab'} onClick={() => switchAuthMode('login')}>
-              Login
-            </button>
-            <button type="button" className={authMode === 'register' ? 'tab active' : 'tab'} onClick={() => switchAuthMode('register')}>
-              Register
-            </button>
-            <button type="button" className={authMode === 'reset' ? 'tab active' : 'tab'} onClick={() => switchAuthMode('reset')}>
-              Forgot Password
-            </button>
-          </div>
-
-          {authMode === 'login' ? (
-            <form className="user-form auth-form" onSubmit={handleLogin}>
-              <label className="wide">
-                Email
-                <input name="email" type="email" value={loginForm.email} onChange={onLoginInputChange} required />
-              </label>
-              <label className="wide">
-                Password
-                <input name="password" type="password" value={loginForm.password} onChange={onLoginInputChange} required />
-              </label>
-              <button className="solid-btn" type="submit" disabled={authSubmitting}>
-                {authSubmitting ? 'Signing in...' : 'Login'}
-              </button>
-            </form>
-          ) : null}
-
-          {authMode === 'register' ? (
-            <form className="user-form auth-form" onSubmit={handleRegister}>
-              <label className="wide">
-                Email
-                <input name="email" type="email" value={registerForm.email} onChange={onRegisterInputChange} required />
-              </label>
-              <label>
-                Password
-                <input name="password" type="password" value={registerForm.password} onChange={onRegisterInputChange} required />
-              </label>
-              <label>
-                Confirm password
-                <input name="confirmPassword" type="password" value={registerForm.confirmPassword} onChange={onRegisterInputChange} required />
-              </label>
-              <button className="solid-btn" type="submit" disabled={authSubmitting}>
-                {authSubmitting ? 'Creating account...' : 'Create account'}
-              </button>
-            </form>
-          ) : null}
-
-          {authMode === 'reset' ? (
-            <form className="user-form auth-form" onSubmit={handleResetPassword}>
-              <label className="wide">
-                Account email
-                <input name="email" type="email" value={resetPasswordForm.email} onChange={onResetInputChange} required />
-              </label>
-              <label>
-                New password
-                <input name="newPassword" type="password" value={resetPasswordForm.newPassword} onChange={onResetInputChange} required />
-              </label>
-              <label>
-                Confirm password
-                <input name="confirmPassword" type="password" value={resetPasswordForm.confirmPassword} onChange={onResetInputChange} required />
-              </label>
-              <button className="solid-btn" type="submit" disabled={authSubmitting}>
-                {authSubmitting ? 'Updating password...' : 'Reset password'}
-              </button>
-            </form>
-          ) : null}
-
-          {message ? <p className="feedback ok">{message}</p> : null}
-          {error ? <p className="feedback bad">{error}</p> : null}
-        </section>
-        <p className="status-pill api-status-fixed" role="status">{apiStatus}</p>
-      </main>
+      <AuthPage
+        authMode={authMode}
+        switchAuthMode={switchAuthMode}
+        loginForm={loginForm}
+        onLoginInputChange={onLoginInputChange}
+        handleLogin={handleLogin}
+        registerForm={registerForm}
+        onRegisterInputChange={onRegisterInputChange}
+        handleRegister={handleRegister}
+        resetPasswordForm={resetPasswordForm}
+        onResetInputChange={onResetInputChange}
+        handleResetPassword={handleResetPassword}
+        authSubmitting={authSubmitting}
+        message={message}
+        error={error}
+        apiStatus={apiStatus}
+      />
     )
   }
 
   if (!authUser.profileCompleted) {
     return (
-      <main className="app-shell auth-shell">
-        <header className="hero">
-          <p className="eyebrow">SkillWise</p>
-          <h1>Set Up Your Account</h1>
-          <p className="hero-copy">This is a one-time step. Add your name to finish onboarding.</p>
-        </header>
-
-        <section className="panel auth-panel">
-          <form className="user-form auth-form" onSubmit={handleSetupAccount}>
-            <label>
-              First name
-              <input name="firstName" value={setupForm.firstName} onChange={onSetupInputChange} required />
-            </label>
-            <label>
-              Last name
-              <input name="lastName" value={setupForm.lastName} onChange={onSetupInputChange} required />
-            </label>
-            <button className="solid-btn" type="submit" disabled={authSubmitting}>
-              {authSubmitting ? 'Saving profile...' : 'Finish setup'}
-            </button>
-          </form>
-
-          {message ? <p className="feedback ok">{message}</p> : null}
-          {error ? <p className="feedback bad">{error}</p> : null}
-        </section>
-        <p className="status-pill api-status-fixed" role="status">{apiStatus}</p>
-      </main>
+      <SetupPage
+        setupForm={setupForm}
+        onSetupInputChange={onSetupInputChange}
+        handleSetupAccount={handleSetupAccount}
+        authSubmitting={authSubmitting}
+        message={message}
+        error={error}
+        apiStatus={apiStatus}
+      />
     )
   }
 
   return (
     <main className="app-shell">
       <header className="hero">
-        <p className="eyebrow">SkillWise</p>
+        <img src={logo} alt="SkillWise" className="hero-logo" />
         <h1>Find Your Mentor</h1>
         <p className="hero-copy">Signed in as {authUser.firstName} {authUser.lastName}.</p>
         <button type="button" className="logout-btn" onClick={logout}>Logout</button>
@@ -709,209 +712,79 @@ function App() {
         <button className={dashView === 'payments' ? 'tab active' : 'tab'} onClick={() => setDashView('payments')}>Payments</button>
       </nav>
 
-      {/* ── Browse Mentors ── */}
       {dashView === 'browse' && !selectedMentor && (
-        <section className="panel list-panel">
-          <div className="panel-headline">
-            <h2>Mentors ({filteredMentors.length})</h2>
-            <input className="search" type="search" value={skillFilter} onChange={e => setSkillFilter(e.target.value)} placeholder="Search by skill or name" />
-          </div>
-          {loading ? <p className="muted">Loading mentors...</p> : null}
-          {!loading && filteredMentors.length === 0 ? <p className="muted">No mentors found. Be the first — set up your mentor profile!</p> : null}
-          <div className="user-grid">
-            {filteredMentors.map(mentor => (
-              <article className="user-card" key={mentor.id}>
-                <p className="name">{mentor.firstName} {mentor.lastName}</p>
-                <p className="skills-tag">{mentor.skills}</p>
-                <p className="muted">${mentor.hourlyRate}/hr · {mentor.availability || 'Availability not set'}</p>
-                {mentor.avgRating ? <p className="muted">★ {mentor.avgRating} ({mentor.reviewCount} reviews)</p> : null}
-                <button className="ghost-btn" onClick={() => viewMentor(mentor)}>View Profile</button>
-              </article>
-            ))}
-          </div>
-          {message ? <p className="feedback ok">{message}</p> : null}
-          {error ? <p className="feedback bad">{error}</p> : null}
-        </section>
+        <BrowseMentors
+          filteredMentors={filteredMentors}
+          skillFilter={skillFilter}
+          setSkillFilter={setSkillFilter}
+          loading={loading}
+          viewMentor={viewMentor}
+          message={message}
+          error={error}
+        />
       )}
 
-      {/* ── Mentor Detail ── */}
       {dashView === 'browse' && selectedMentor && (
-        <section className="panel">
-          <button className="ghost-btn" onClick={backToBrowse}>← Back to Browse</button>
-          <div className="mentor-detail">
-            <h2>{selectedMentor.firstName} {selectedMentor.lastName}</h2>
-            <p className="skills-tag">{selectedMentor.skills}</p>
-            {selectedMentor.bio ? <p>{selectedMentor.bio}</p> : null}
-            {selectedMentor.credentials ? <p className="muted">Credentials: {selectedMentor.credentials}</p> : null}
-            <p className="muted">Availability: {selectedMentor.availability || 'Not specified'}</p>
-            <p><strong>${selectedMentor.hourlyRate}/hr</strong></p>
-            {selectedMentor.userId !== authUser.id && (
-              <button className="solid-btn" style={{ gridColumn: 'unset', width: 'fit-content' }} onClick={() => handleBookSession(selectedMentor)} disabled={formSubmitting}>
-                {formSubmitting ? 'Booking...' : `Book Session — $${selectedMentor.hourlyRate}`}
-              </button>
-            )}
-          </div>
-          <div className="reviews-section">
-            <h3>Reviews ({mentorReviews.length})</h3>
-            {mentorReviews.length === 0 ? <p className="muted">No reviews yet.</p> : null}
-            {mentorReviews.map(r => (
-              <div className="review-card" key={r.id}>
-                <p><strong>{r.firstName} {r.lastName}</strong> — {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</p>
-                {r.comment ? <p>{r.comment}</p> : null}
-                {r.reviewerId === authUser.id && (
-                  <button className="ghost-btn danger" onClick={() => handleDeleteReview(r.id)}>Delete</button>
-                )}
-              </div>
-            ))}
-            {selectedMentor.userId !== authUser.id && (
-              <form className="user-form" style={{ marginTop: '1rem' }} onSubmit={handleAddReview}>
-                <h4 style={{ gridColumn: '1 / -1', margin: '0 0 0.25rem' }}>Leave a Review</h4>
-                <label>
-                  Rating
-                  <select value={reviewForm.rating} onChange={e => setReviewForm(c => ({ ...c, rating: e.target.value }))}>
-                    <option value="5">★★★★★ (5)</option>
-                    <option value="4">★★★★☆ (4)</option>
-                    <option value="3">★★★☆☆ (3)</option>
-                    <option value="2">★★☆☆☆ (2)</option>
-                    <option value="1">★☆☆☆☆ (1)</option>
-                  </select>
-                </label>
-                <label className="wide">
-                  Comment
-                  <textarea value={reviewForm.comment} onChange={e => setReviewForm(c => ({ ...c, comment: e.target.value }))} rows={3} />
-                </label>
-                <button className="solid-btn" type="submit" disabled={formSubmitting}>{formSubmitting ? 'Posting...' : 'Post Review'}</button>
-              </form>
-            )}
-          </div>
-          {message ? <p className="feedback ok">{message}</p> : null}
-          {error ? <p className="feedback bad">{error}</p> : null}
-        </section>
+        <MentorDetail
+          selectedMentor={selectedMentor}
+          backToBrowse={backToBrowse}
+          mentorReviews={mentorReviews}
+          reviewForm={reviewForm}
+          setReviewForm={setReviewForm}
+          handleAddReview={handleAddReview}
+          handleDeleteReview={handleDeleteReview}
+          handleBookSession={handleBookSession}
+          authUser={authUser}
+          formSubmitting={formSubmitting}
+          message={message}
+          error={error}
+        />
       )}
 
-      {/* ── Messages ── */}
       {dashView === 'messages' && (
-        <section className="panel">
-          <h2>Messages</h2>
-          <form className="user-form" onSubmit={handleSendMessage}>
-            <h3 className="wide" style={{ margin: '0 0 0.25rem' }}>New Message</h3>
-            <label className="wide">
-              To
-              <select value={messageForm.receiverId} onChange={e => setMessageForm(c => ({ ...c, receiverId: e.target.value }))} required>
-                <option value="">Select a user...</option>
-                {users.filter(u => u.id !== authUser.id).map(u => (
-                  <option key={u.id} value={u.id}>{u.firstName} {u.lastName} ({u.email})</option>
-                ))}
-              </select>
-            </label>
-            <label className="wide">
-              Message
-              <textarea value={messageForm.content} onChange={e => setMessageForm(c => ({ ...c, content: e.target.value }))} rows={3} required />
-            </label>
-            <button className="solid-btn" type="submit" disabled={formSubmitting}>{formSubmitting ? 'Sending...' : 'Send Message'}</button>
-          </form>
-          <div className="message-list">
-            <h3>Inbox / Sent ({messages.length})</h3>
-            {loading ? <p className="muted">Loading...</p> : null}
-            {!loading && messages.length === 0 ? <p className="muted">No messages yet.</p> : null}
-            {messages.map(msg => (
-              <div className="message-card" key={msg.id}>
-                <p className="muted">
-                  {msg.senderId === authUser.id
-                    ? `To: ${msg.receiverFirstName} ${msg.receiverLastName}`
-                    : `From: ${msg.senderFirstName} ${msg.senderLastName}`}
-                </p>
-                <p>{msg.content}</p>
-                <p className="muted small">{new Date(msg.sentAt).toLocaleString()}</p>
-                {msg.senderId === authUser.id && (
-                  <button className="ghost-btn danger" onClick={() => handleDeleteMessage(msg.id)}>Delete</button>
-                )}
-              </div>
-            ))}
-          </div>
-          {message ? <p className="feedback ok">{message}</p> : null}
-          {error ? <p className="feedback bad">{error}</p> : null}
-        </section>
+        <Messages
+          messages={messages}
+          users={users}
+          authUser={authUser}
+          messageForm={messageForm}
+          setMessageForm={setMessageForm}
+          handleSendMessage={handleSendMessage}
+          handleDeleteMessage={handleDeleteMessage}
+          loading={loading}
+          formSubmitting={formSubmitting}
+          message={message}
+          error={error}
+        />
       )}
 
-      {/* ── My Mentor Profile ── */}
       {dashView === 'my-profile' && (
-        <section className="panel">
-          <h2>My Mentor Profile</h2>
-          {loading ? <p className="muted">Loading...</p> : null}
-          {!loading && myMentorProfile && !editingMentor && (
-            <div className="mentor-detail">
-              <p className="skills-tag">{myMentorProfile.skills}</p>
-              {myMentorProfile.bio ? <p>{myMentorProfile.bio}</p> : null}
-              {myMentorProfile.credentials ? <p className="muted">Credentials: {myMentorProfile.credentials}</p> : null}
-              <p className="muted">Availability: {myMentorProfile.availability || 'Not set'}</p>
-              <p><strong>${myMentorProfile.hourlyRate}/hr</strong></p>
-              <div className="btn-row">
-                <button className="ghost-btn" onClick={() => setEditingMentor(true)}>Edit Profile</button>
-                <button className="ghost-btn danger" onClick={handleDeleteMentor} disabled={formSubmitting}>Delete Profile</button>
-              </div>
-            </div>
-          )}
-          {!loading && (myMentorProfile === null || editingMentor) && (
-            <form className="user-form" onSubmit={myMentorProfile ? handleUpdateMentor : handleCreateMentor}>
-              <h3 className="wide" style={{ margin: '0 0 0.25rem' }}>{myMentorProfile ? 'Edit Profile' : 'Become a Mentor'}</h3>
-              <label className="wide">
-                Skills (e.g. Python, Guitar, Cooking)
-                <input value={mentorForm.skills} onChange={e => setMentorForm(c => ({ ...c, skills: e.target.value }))} required placeholder="Your teachable skills" />
-              </label>
-              <label className="wide">
-                Bio
-                <textarea value={mentorForm.bio} onChange={e => setMentorForm(c => ({ ...c, bio: e.target.value }))} rows={3} placeholder="Tell learners about yourself" />
-              </label>
-              <label className="wide">
-                Credentials
-                <input value={mentorForm.credentials} onChange={e => setMentorForm(c => ({ ...c, credentials: e.target.value }))} placeholder="Degrees, certifications, experience" />
-              </label>
-              <label>
-                Hourly Rate (USD)
-                <input type="number" min="0" step="0.01" value={mentorForm.hourlyRate} onChange={e => setMentorForm(c => ({ ...c, hourlyRate: e.target.value }))} required placeholder="0.00" />
-              </label>
-              <label>
-                Availability
-                <input value={mentorForm.availability} onChange={e => setMentorForm(c => ({ ...c, availability: e.target.value }))} placeholder="e.g. Weekday evenings" />
-              </label>
-              <div className="btn-row wide">
-                <button className="solid-btn" style={{ gridColumn: 'unset' }} type="submit" disabled={formSubmitting}>{formSubmitting ? 'Saving...' : myMentorProfile ? 'Save Changes' : 'Create Profile'}</button>
-                {editingMentor && <button type="button" className="ghost-btn" onClick={() => setEditingMentor(false)}>Cancel</button>}
-              </div>
-            </form>
-          )}
-          {message ? <p className="feedback ok">{message}</p> : null}
-          {error ? <p className="feedback bad">{error}</p> : null}
-        </section>
+        <MyMentorProfile
+          myMentorProfile={myMentorProfile}
+          mentorForm={mentorForm}
+          setMentorForm={setMentorForm}
+          editingMentor={editingMentor}
+          setEditingMentor={setEditingMentor}
+          handleCreateMentor={handleCreateMentor}
+          handleUpdateMentor={handleUpdateMentor}
+          handleDeleteMentor={handleDeleteMentor}
+          loading={loading}
+          formSubmitting={formSubmitting}
+          message={message}
+          error={error}
+        />
       )}
 
-      {/* ── Payments ── */}
       {dashView === 'payments' && (
-        <section className="panel">
-          <h2>Payments</h2>
-          {loading ? <p className="muted">Loading...</p> : null}
-          {!loading && payments.length === 0 ? <p className="muted">No payments yet. Book a mentor session to get started.</p> : null}
-          <div className="user-grid">
-            {payments.map(p => (
-              <article className="user-card" key={p.id}>
-                <p className="name">
-                  {p.payerId === authUser.id
-                    ? `Paid to: ${p.mentorFirstName} ${p.mentorLastName}`
-                    : `Received from: ${p.payerFirstName} ${p.payerLastName}`}
-                </p>
-                <p className="skills-tag">{p.skills}</p>
-                <p className="muted">{p.currency} ${p.amount} · <span className={`status-${p.status}`}>{p.status}</span></p>
-                <p className="muted small">{new Date(p.createdAt).toLocaleString()}</p>
-              </article>
-            ))}
-          </div>
-          {error ? <p className="feedback bad">{error}</p> : null}
-        </section>
+        <Payments
+          payments={payments}
+          authUser={authUser}
+          loading={loading}
+          error={error}
+        />
       )}
-      <p className="status-pill api-status-fixed" role="status">{apiStatus}</p>
     </main>
   )
 }
 
 export default App
+
