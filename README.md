@@ -17,7 +17,6 @@ Secure password storage (bcrypt)
 - Database: SQLite3
 - Password hashing: bcryptjs
 
-
 ## Run the App
 
 ### Install Dependencies

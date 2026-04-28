@@ -12,11 +12,20 @@
   border-radius: 22px;
   padding: 2.2rem;
   background:
-    radial-gradient(110% 120% at 100% 0%, rgba(255, 170, 78, 0.25) 0%, rgba(255, 170, 78, 0) 70%),
-    radial-gradient(80% 100% at 0% 100%, rgba(4, 167, 158, 0.28) 0%, rgba(4, 167, 158, 0) 70%),
-    linear-gradient(155deg, #1d2435, #18212e 56%, #102f38);
+    radial-gradient(110% 120% at 100% 0%, rgba(147, 51, 234, 0.35) 0%, rgba(147, 51, 234, 0) 70%),
+    radial-gradient(80% 100% at 0% 100%, rgba(0, 196, 228, 0.28) 0%, rgba(0, 196, 228, 0) 70%),
+    linear-gradient(155deg, #18102e, #1e1240 56%, #0e1030);
   box-shadow: 0 18px 40px rgba(13, 34, 52, 0.28);
   animation: rise-in 420ms ease-out;
+}
+
+.hero-logo {
+  height: 12rem;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  margin: 0 auto 0.5rem;
+  display: block;
 }
 
 .eyebrow {
@@ -86,7 +95,7 @@
 
 .tab {
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--panel);
   border-radius: 10px;
   min-height: 2.45rem;
   cursor: pointer;
@@ -94,9 +103,9 @@
 }
 
 .tab.active {
-  border-color: #0e8d83;
-  color: #08574e;
-  background: #ecfaf8;
+  border-color: #9333ea;
+  color: #6b21a8;
+  background: #f3e8ff;
   font-weight: 700;
 }
 
@@ -156,7 +165,7 @@
 
 .user-form input:focus,
 .search:focus {
-  outline: 2px solid rgba(4, 167, 158, 0.36);
+  outline: 2px solid rgba(147, 51, 234, 0.36);
   outline-offset: 1px;
 }
 
@@ -173,8 +182,8 @@
 
 .solid-btn {
   grid-column: 1 / -1;
-  background: linear-gradient(145deg, #03978f, #06726d);
-  color: #f7fbff;
+  background: linear-gradient(145deg, #00c4e4, #9333ea);
+  color: #fff;
   font-weight: 700;
 }
 
@@ -184,15 +193,15 @@
 }
 
 .ghost-btn {
-  background: #fff;
+  background: var(--panel);
   border-color: var(--line-strong);
   color: var(--ink);
 }
 
 .danger-btn {
-  background: #fff4f2;
-  border-color: #ffd8d3;
-  color: #b43723;
+  background: #2a1018;
+  border-color: #5c2020;
+  color: #f87171;
 }
 
 .feedback {
@@ -203,15 +212,15 @@
 }
 
 .feedback.ok {
-  background: #ebfaf7;
-  color: #106353;
-  border: 1px solid #bceee4;
+  background: #12253a;
+  color: #67e8f9;
+  border: 1px solid #164e63;
 }
 
 .feedback.bad {
-  background: #fff1ee;
-  color: #8c2010;
-  border: 1px solid #ffccc2;
+  background: #2a1018;
+  color: #fca5a5;
+  border: 1px solid #5c2020;
 }
 
 .list-panel {
@@ -232,7 +241,7 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 0.9rem;
-  background: #fff;
+  background: var(--panel);
   display: grid;
   gap: 0.36rem;
   transform-origin: center;
@@ -288,9 +297,9 @@
 /* ── Skills tag / pill ───────────────────────────────────── */
 .skills-tag {
   display: inline-block;
-  background: #ecfaf8;
-  color: #08574e;
-  border: 1px solid #bceee4;
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #ddd6fe;
   border-radius: 999px;
   padding: 0.25rem 0.75rem;
   font-size: 0.88rem;
@@ -316,7 +325,7 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 0.75rem;
-  background: #fff;
+  background: var(--panel);
   margin-bottom: 0.6rem;
   display: grid;
   gap: 0.3rem;
@@ -332,7 +341,7 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 0.75rem;
-  background: #fff;
+  background: var(--panel);
   margin-bottom: 0.6rem;
   display: grid;
   gap: 0.3rem;
@@ -346,9 +355,9 @@
 
 /* ── Danger variant for ghost buttons ────────────────────── */
 .ghost-btn.danger {
-  background: #fff4f2;
-  border-color: #ffd8d3;
-  color: #b43723;
+  background: #2a1018;
+  border-color: #5c2020;
+  color: #f87171;
 }
 
 /* ── Payment status badges ───────────────────────────────── */
@@ -373,15 +382,157 @@
 
 .user-form textarea:focus,
 .user-form select:focus {
-  outline: 2px solid rgba(4, 167, 158, 0.36);
+  outline: 2px solid rgba(147, 51, 234, 0.36);
   outline-offset: 1px;
 }
 
 /* ── Panel heading spacing ───────────────────────────────── */
 .panel > h2 { margin: 0 0 1rem; }
 
-/* ── Responsive overrides ────────────────────────────────── */
-@media (max-width: 760px) {
+/* ── Avatar initials circle ──────────────────────────────── */
+.avatar-circle {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00c4e4, #9333ea);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.avatar-lg {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00c4e4, #9333ea);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.35);
+}
+
+/* ── Loading spinner ─────────────────────────────────────── */
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--line);
+  border-top-color: #9333ea;
+  border-radius: 50%;
+  animation: spin 600ms linear infinite;
+  margin: 1.5rem auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--muted);
+}
+
+.empty-state-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.97rem;
+}
+
+/* ── Mentor hero header ──────────────────────────────────── */
+.mentor-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem 0 1.25rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1.25rem;
+}
+
+.mentor-hero-info {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.mentor-hero-info h2 { margin: 0; }
+
+.mentor-rate {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.mentor-rate span {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* ── Message sent / received bubbles ────────────────────── */
+.message-card.msg-sent {
+  background: #1e1040;
+  border-color: #4c1d95;
+}
+
+.message-card.msg-received {
+  background: var(--panel);
+}
+
+.msg-label {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.msg-content {
+  margin: 0;
+}
+
+/* ── Payment card ────────────────────────────────────────── */
+.payment-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.payment-currency {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status-badge.status-completed { background: #0d2a2a; color: #67e8f9; border: 1px solid #164e63; }
+.status-badge.status-pending   { background: #2a1f0a; color: #fcd34d; border: 1px solid #78350f; }
+.status-badge.status-refunded  { background: #2a1018; color: #f87171; border: 1px solid #5c2020; }
+
+/* ── Responsive overrides ────────────────────────────────── */@media (max-width: 760px) {
   .app-shell {
     width: calc(100% - 1.2rem);
     margin: 0.9rem auto 1.6rem;
