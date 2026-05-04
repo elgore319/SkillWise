@@ -603,13 +603,13 @@ app.post('/api/payments', async (req, res) => {
   }
 });
 
-// PUT /api/payments/:id — update the status of a payment (e.g. issue a refund)
+// PUT /api/payments/:id — update the status of a payment
 app.put('/api/payments/:id', async (req, res) => {
   try {
     const { status } = req.body;
-    const validStatuses = ['pending', 'completed', 'refunded'];
+    const validStatuses = ['pending', 'completed'];
     if (!status || !validStatuses.includes(status)) {
-      return res.status(400).json({ error: 'status must be: pending, completed, or refunded' });
+      return res.status(400).json({ error: 'status must be: pending or completed' });
     }
     const db = await openDb();
     const result = await db.run('UPDATE payments SET status = ? WHERE id = ?', [status, req.params.id]);

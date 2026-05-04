@@ -361,9 +361,8 @@
 }
 
 /* ── Payment status badges ───────────────────────────────── */
-.status-completed { color: #106353; font-weight: 600; }
-.status-pending   { color: #8a6a00; font-weight: 600; }
-.status-refunded  { color: #b43723; font-weight: 600; }
+.status-completed { color: #67e8f9; font-weight: 600; }
+.status-pending   { color: #fcd34d; font-weight: 600; }
 
 /* ── Small helper text ───────────────────────────────────── */
 .small { font-size: 0.82rem; }
@@ -530,7 +529,6 @@
 
 .status-badge.status-completed { background: #0d2a2a; color: #67e8f9; border: 1px solid #164e63; }
 .status-badge.status-pending   { background: #2a1f0a; color: #fcd34d; border: 1px solid #78350f; }
-.status-badge.status-refunded  { background: #2a1018; color: #f87171; border: 1px solid #5c2020; }
 
 /* ── Responsive overrides ────────────────────────────────── */@media (max-width: 760px) {
   .app-shell {
