@@ -4,11 +4,14 @@ SkillWise is a full-stack app with React (frontend), Express (backend), and SQLi
 
 ## Current Features
 
-User registration and login
-Password reset
-One-time account setup
-User dashboard with account directory and search
-Secure password storage (bcrypt)
+- User registration, login, and password reset
+- One-time account setup (first and last name)
+- Browse and search mentor profiles
+- Mentor profile creation, editing, and deletion
+- Reviews on mentor profiles
+- Messaging between users
+- Payment recording when booking a session
+- Secure password storage (bcrypt)
 
 ## Tech Stack
 
