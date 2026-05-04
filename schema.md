@@ -73,6 +73,6 @@ columns: id, payerId, mentorId, amount, currency, status, createdAt;
    mentorId: int,       // foreign key → mentors.id
    amount: decimal,
    currency: string,
-   status: string,      // pending | completed | refunded
+   status: string,      // pending | completed
    createdAt: string
 }
